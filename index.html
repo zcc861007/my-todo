@@ -8,105 +8,93 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: "Inter", "PingFang SC", "Noto Sans SC", "Noto Sans JP", sans-serif;
+      background: #f6f2ff;
       min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 20px;
     }
 
     .app {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
       width: 100%;
-      max-width: 520px;
-      overflow: hidden;
+      max-width: 393px;
+      min-height: 100vh;
+      padding: 64px 18px 40px;
     }
 
-    .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #fff;
-      padding: 28px 28px 20px;
-    }
-
-    .header h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 6px;
-    }
-
-    .header .summary {
-      font-size: 0.88rem;
-      opacity: 0.85;
-    }
-
-    .input-area {
-      display: flex;
-      gap: 10px;
-      padding: 20px 24px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-
-    .input-area input {
-      flex: 1;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .input-area input:focus { border-color: #667eea; }
-
-    .input-area button {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 20px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
-      white-space: nowrap;
-    }
-
-    .input-area button:hover { opacity: 0.9; }
-    .input-area button:active { transform: scale(0.97); }
-
+    /* ── Filter tabs ── */
     .filters {
       display: flex;
-      gap: 6px;
-      padding: 12px 24px;
-      border-bottom: 1px solid #f0f0f0;
+      gap: 17px;
+      margin-bottom: 20px;
     }
 
     .filter-btn {
-      background: none;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 20px;
-      padding: 5px 14px;
-      font-size: 0.82rem;
+      flex: 1;
+      background: white;
+      border: none;
+      border-radius: 15px;
+      height: 55px;
+      font-size: 12px;
+      color: #000;
       cursor: pointer;
-      color: #666;
-      transition: all 0.2s;
+      transition: box-shadow 0.2s, background 0.2s;
     }
 
     .filter-btn.active {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border-color: transparent;
-      color: #fff;
+      box-shadow: 0 4px 16px rgba(102, 45, 195, 0.18);
+      background: #fff;
+      font-weight: 600;
     }
 
+    /* ── Input row ── */
+    .input-row {
+      background: white;
+      border-radius: 15px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px 0 20px;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .input-row input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 12px;
+      color: #000;
+      background: transparent;
+      font-family: inherit;
+    }
+
+    .input-row input::placeholder { color: #aaa; }
+
+    .add-btn {
+      background: #d9d9d9;
+      border: none;
+      width: 32px;
+      height: 26px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .add-btn:hover { background: #c4c4c4; }
+
+    /* ── Task list ── */
     .list {
       list-style: none;
-      min-height: 60px;
-      max-height: 400px;
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .list:empty::after {
@@ -115,16 +103,17 @@
       text-align: center;
       color: #bbb;
       padding: 40px 0;
-      font-size: 0.9rem;
+      font-size: 12px;
     }
 
     .item {
+      background: white;
+      border-radius: 15px;
+      height: 58px;
       display: flex;
       align-items: center;
+      padding: 0 14px 0 16px;
       gap: 12px;
-      padding: 14px 24px;
-      border-bottom: 1px solid #f7f7f7;
-      transition: background 0.15s;
       animation: fadeIn 0.2s ease;
     }
 
@@ -133,16 +122,13 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .item:last-child { border-bottom: none; }
-    .item:hover { background: #fafafa; }
-
     .item.done .text { text-decoration: line-through; color: #bbb; }
 
     .checkbox {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      border: 2px solid #d0d0d0;
+      border: 1.5px solid #ccc;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -152,7 +138,7 @@
     }
 
     .item.done .checkbox {
-      background: linear-gradient(135deg, #667eea, #764ba2);
+      background: #a78bfa;
       border-color: transparent;
     }
 
@@ -161,8 +147,8 @@
 
     .text {
       flex: 1;
-      font-size: 0.95rem;
-      color: #333;
+      font-size: 13px;
+      color: #222;
       word-break: break-all;
       outline: none;
     }
@@ -175,7 +161,7 @@
 
     .actions {
       display: flex;
-      gap: 6px;
+      gap: 4px;
       flex-shrink: 0;
       opacity: 0;
       transition: opacity 0.15s;
@@ -190,7 +176,7 @@
       padding: 4px;
       border-radius: 6px;
       color: #aaa;
-      font-size: 1rem;
+      font-size: 0.95rem;
       transition: color 0.15s, background 0.15s;
       line-height: 1;
     }
@@ -198,23 +184,24 @@
     .btn-icon:hover { background: #f0f0f0; color: #555; }
     .btn-icon.del:hover { color: #e55; background: #fff0f0; }
 
+    /* ── Footer ── */
     .footer {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 14px 24px;
-      background: #fafafa;
-      border-top: 1px solid #f0f0f0;
-      font-size: 0.82rem;
-      color: #999;
+      align-items: center;
+      margin-top: 20px;
+      font-size: 11px;
+      color: #aaa;
+      padding: 0 4px;
     }
 
     .clear-btn {
       background: none;
       border: none;
-      color: #e55;
+      color: #c084fc;
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 11px;
+      font-family: inherit;
       padding: 0;
     }
 
@@ -223,20 +210,15 @@
 </head>
 <body>
 <div class="app">
-  <div class="header">
-    <h1>待办事项</h1>
-    <div class="summary" id="summary">加载中...</div>
-  </div>
-
-  <div class="input-area">
-    <input id="newTask" type="text" placeholder="输入新的待办事项，按 Enter 添加" maxlength="200" />
-    <button onclick="addTask()">+ 添加</button>
-  </div>
-
   <div class="filters">
-    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">全部</button>
-    <button class="filter-btn" data-filter="active" onclick="setFilter('active')">未完成</button>
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">全部任务</button>
+    <button class="filter-btn" data-filter="active" onclick="setFilter('active')">进行中</button>
     <button class="filter-btn" data-filter="done" onclick="setFilter('done')">已完成</button>
+  </div>
+
+  <div class="input-row">
+    <input id="newTask" type="text" placeholder="添加任务" maxlength="200" />
+    <button class="add-btn" onclick="addTask()">+</button>
   </div>
 
   <ul class="list" id="list"></ul>
@@ -264,8 +246,8 @@
     list.innerHTML = visible.map(t => `
       <li class="item${t.done ? ' done' : ''}" id="item-${t.id}">
         <div class="checkbox" onclick="toggle(${t.id})" title="切换完成状态">
-          <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-            <polyline points="1,5 4.5,8.5 11,1" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+            <polyline points="1,4.5 4,7.5 10,1" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <span class="text" id="text-${t.id}">${escHtml(t.text)}</span>
@@ -279,10 +261,8 @@
     const total = tasks.length;
     const done = tasks.filter(t => t.done).length;
     const active = total - done;
-    document.getElementById('summary').textContent =
-      `共 ${total} 项 · 已完成 ${done} 项 · 剩余 ${active} 项`;
     document.getElementById('footerInfo').textContent =
-      `${active} 项未完成`;
+      `共 ${total} 项 · 进行中 ${active} · 已完成 ${done}`;
 
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.filter === filter);
@@ -318,7 +298,6 @@
     const span = document.getElementById('text-' + id);
     span.contentEditable = 'true';
     span.focus();
-    // move cursor to end
     const range = document.createRange();
     range.selectNodeContents(span);
     range.collapse(false);
