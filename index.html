@@ -1,250 +1,313 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>待办事项</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>待办事项</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    body {
-      font-family: "Inter", "PingFang SC", "Noto Sans SC", "Noto Sans JP", sans-serif;
-      background: #f6f2ff;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-    }
+      body {
+        font-family:
+          "Inter", "PingFang SC", "Noto Sans SC", "Noto Sans JP", sans-serif;
+        background: #f6f2ff;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+      }
 
-    .app {
-      width: 100%;
-      max-width: 393px;
-      min-height: 100vh;
-      padding: 64px 18px 40px;
-    }
+      .app {
+        width: 100%;
+        max-width: 393px;
+        min-height: 100vh;
+        padding: 64px 18px 40px;
+      }
 
-    /* ── Filter tabs ── */
-    .filters {
-      display: flex;
-      gap: 17px;
-      margin-bottom: 20px;
-    }
+      /* ── Filter tabs ── */
+      .filters {
+        display: flex;
+        gap: 17px;
+        margin-bottom: 20px;
+      }
 
-    .filter-btn {
-      flex: 1;
-      background: white;
-      border: none;
-      border-radius: 15px;
-      height: 55px;
-      font-size: 12px;
-      color: #000;
-      cursor: pointer;
-      transition: box-shadow 0.2s, background 0.2s;
-    }
+      .filter-btn {
+        flex: 1;
+        background: white;
+        border: none;
+        border-radius: 15px;
+        height: 55px;
+        font-size: 12px;
+        color: #000;
+        cursor: pointer;
+        transition:
+          box-shadow 0.2s,
+          background 0.2s;
+      }
 
-    .filter-btn.active {
-      box-shadow: 0 4px 16px rgba(102, 45, 195, 0.18);
-      background: #fff;
-      font-weight: 600;
-    }
+      .filter-btn.active {
+        box-shadow: 0 4px 16px rgba(102, 45, 195, 0.18);
+        background: #fff;
+        font-weight: 600;
+      }
 
-    /* ── Input row ── */
-    .input-row {
-      background: white;
-      border-radius: 15px;
-      height: 58px;
-      display: flex;
-      align-items: center;
-      padding: 0 14px 0 20px;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
+      /* ── Input row ── */
+      .input-row {
+        background: white;
+        border-radius: 15px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        padding: 0 14px 0 20px;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
 
-    .input-row input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 12px;
-      color: #000;
-      background: transparent;
-      font-family: inherit;
-    }
+      .input-row input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 12px;
+        color: #000;
+        background: transparent;
+        font-family: inherit;
+      }
 
-    .input-row input::placeholder { color: #aaa; }
+      .input-row input::placeholder {
+        color: #aaa;
+      }
 
-    .add-btn {
-      background: #d9d9d9;
-      border: none;
-      width: 32px;
-      height: 26px;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #444;
-      flex-shrink: 0;
-      transition: background 0.15s;
-    }
+      .add-btn {
+        background: #d9d9d9;
+        border: none;
+        width: 32px;
+        height: 26px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #444;
+        flex-shrink: 0;
+        transition: background 0.15s;
+      }
 
-    .add-btn:hover { background: #c4c4c4; }
+      .add-btn:hover {
+        background: #c4c4c4;
+      }
 
-    /* ── Task list ── */
-    .list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+      /* ── Task list ── */
+      .list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-    .list:empty::after {
-      content: "暂无待办事项";
-      display: block;
-      text-align: center;
-      color: #bbb;
-      padding: 40px 0;
-      font-size: 12px;
-    }
+      .list:empty::after {
+        content: "暂无待办事项";
+        display: block;
+        text-align: center;
+        color: #bbb;
+        padding: 40px 0;
+        font-size: 12px;
+      }
 
-    .item {
-      background: white;
-      border-radius: 15px;
-      height: 58px;
-      display: flex;
-      align-items: center;
-      padding: 0 14px 0 16px;
-      gap: 12px;
-      animation: fadeIn 0.2s ease;
-    }
+      .item {
+        background: white;
+        border-radius: 15px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        padding: 0 14px 0 16px;
+        gap: 12px;
+        animation: fadeIn 0.2s ease;
+      }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    .item.done .text { text-decoration: line-through; color: #bbb; }
+      .item.done .text {
+        text-decoration: line-through;
+        color: #bbb;
+      }
 
-    .checkbox {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 1.5px solid #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: all 0.2s;
-    }
+      .checkbox {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1.5px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all 0.2s;
+      }
 
-    .item.done .checkbox {
-      background: #a78bfa;
-      border-color: transparent;
-    }
+      .item.done .checkbox {
+        background: #a78bfa;
+        border-color: transparent;
+      }
 
-    .checkbox svg { display: none; }
-    .item.done .checkbox svg { display: block; }
+      .checkbox svg {
+        display: none;
+      }
+      .item.done .checkbox svg {
+        display: block;
+      }
 
-    .text {
-      flex: 1;
-      font-size: 13px;
-      color: #222;
-      word-break: break-all;
-      outline: none;
-    }
+      .text {
+        flex: 1;
+        font-size: 13px;
+        color: #222;
+        word-break: break-all;
+        outline: none;
+      }
 
-    .text[contenteditable="true"] {
-      background: #f0edff;
-      border-radius: 6px;
-      padding: 2px 6px;
-    }
+      .text[contenteditable="true"] {
+        background: #f0edff;
+        border-radius: 6px;
+        padding: 2px 6px;
+      }
 
-    .actions {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
+      .actions {
+        display: flex;
+        gap: 4px;
+        flex-shrink: 0;
+        opacity: 0;
+        transition: opacity 0.15s;
+      }
 
-    .item:hover .actions { opacity: 1; }
+      .item:hover .actions {
+        opacity: 1;
+      }
 
-    .btn-icon {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 6px;
-      color: #aaa;
-      font-size: 0.95rem;
-      transition: color 0.15s, background 0.15s;
-      line-height: 1;
-    }
+      .btn-icon {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 6px;
+        color: #aaa;
+        font-size: 0.95rem;
+        transition:
+          color 0.15s,
+          background 0.15s;
+        line-height: 1;
+      }
 
-    .btn-icon:hover { background: #f0f0f0; color: #555; }
-    .btn-icon.del:hover { color: #e55; background: #fff0f0; }
+      .btn-icon:hover {
+        background: #f0f0f0;
+        color: #555;
+      }
+      .btn-icon.del:hover {
+        color: #e55;
+        background: #fff0f0;
+      }
 
-    /* ── Footer ── */
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 20px;
-      font-size: 11px;
-      color: #aaa;
-      padding: 0 4px;
-    }
+      /* ── Footer ── */
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        font-size: 11px;
+        color: #aaa;
+        padding: 0 4px;
+      }
 
-    .clear-btn {
-      background: none;
-      border: none;
-      color: #c084fc;
-      cursor: pointer;
-      font-size: 11px;
-      font-family: inherit;
-      padding: 0;
-    }
+      .clear-btn {
+        background: none;
+        border: none;
+        color: #c084fc;
+        cursor: pointer;
+        font-size: 11px;
+        font-family: inherit;
+        padding: 0;
+      }
 
-    .clear-btn:hover { text-decoration: underline; }
-  </style>
-</head>
-<body>
-<div class="app">
-  <div class="filters">
-    <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">全部任务</button>
-    <button class="filter-btn" data-filter="active" onclick="setFilter('active')">进行中</button>
-    <button class="filter-btn" data-filter="done" onclick="setFilter('done')">已完成</button>
-  </div>
+      .clear-btn:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="filters">
+        <button
+          class="filter-btn active"
+          data-filter="all"
+          onclick="setFilter('all')"
+        >
+          全部任务
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="active"
+          onclick="setFilter('active')"
+        >
+          进行中
+        </button>
+        <button
+          class="filter-btn"
+          data-filter="done"
+          onclick="setFilter('done')"
+        >
+          已完成
+        </button>
+      </div>
 
-  <div class="input-row">
-    <input id="newTask" type="text" placeholder="添加任务" maxlength="200" />
-    <button class="add-btn" onclick="addTask()">+</button>
-  </div>
+      <div class="input-row">
+        <input
+          id="newTask"
+          type="text"
+          placeholder="添加任务"
+          maxlength="200"
+        />
+        <button class="add-btn" onclick="addTask()">+</button>
+      </div>
 
-  <ul class="list" id="list"></ul>
+      <ul class="list" id="list"></ul>
 
-  <div class="footer">
-    <span id="footerInfo"></span>
-    <button class="clear-btn" onclick="clearDone()">清除已完成</button>
-  </div>
-</div>
+      <div class="footer">
+        <span id="footerInfo"></span>
+        <button class="clear-btn" onclick="clearDone()">清除已完成</button>
+      </div>
+    </div>
 
-<script>
-  let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-  let filter = 'all';
+    <script>
+      let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      let filter = "all";
 
-  function save() {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }
+      function save() {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
 
-  function render() {
-    const list = document.getElementById('list');
-    const visible = tasks.filter(t =>
-      filter === 'all' ? true : filter === 'done' ? t.done : !t.done
-    );
+      function render() {
+        const list = document.getElementById("list");
+        const visible = tasks.filter((t) =>
+          filter === "all" ? true : filter === "done" ? t.done : !t.done,
+        );
 
-    list.innerHTML = visible.map(t => `
-      <li class="item${t.done ? ' done' : ''}" id="item-${t.id}">
+        list.innerHTML = visible
+          .map(
+            (t) => `
+      <li class="item${t.done ? " done" : ""}" id="item-${t.id}">
         <div class="checkbox" onclick="toggle(${t.id})" title="切换完成状态">
           <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
             <polyline points="1,4.5 4,7.5 10,1" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -256,79 +319,100 @@
           <button class="btn-icon del" onclick="remove(${t.id})" title="删除">🗑️</button>
         </div>
       </li>
-    `).join('');
+    `,
+          )
+          .join("");
 
-    const total = tasks.length;
-    const done = tasks.filter(t => t.done).length;
-    const active = total - done;
-    document.getElementById('footerInfo').textContent =
-      `共 ${total} 项 · 进行中 ${active} · 已完成 ${done}`;
+        const total = tasks.length;
+        const done = tasks.filter((t) => t.done).length;
+        const active = total - done;
+        document.getElementById("footerInfo").textContent =
+          `共 ${total} 项 · 进行中 ${active} · 已完成 ${done}`;
 
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.filter === filter);
-    });
-  }
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.filter === filter);
+        });
+      }
 
-  function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+      function escHtml(s) {
+        return s
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
 
-  function addTask() {
-    const input = document.getElementById('newTask');
-    const text = input.value.trim();
-    if (!text) return;
-    tasks.unshift({ id: Date.now(), text, done: false });
-    input.value = '';
-    save(); render();
-  }
+      function addTask() {
+        const input = document.getElementById("newTask");
+        const text = input.value.trim();
+        if (!text) return;
+        tasks.unshift({ id: Date.now(), text, done: false });
+        input.value = "";
+        save();
+        render();
+      }
 
-  function toggle(id) {
-    const t = tasks.find(t => t.id === id);
-    if (t) { t.done = !t.done; save(); render(); }
-  }
+      function toggle(id) {
+        const t = tasks.find((t) => t.id === id);
+        if (t) {
+          t.done = !t.done;
+          save();
+          render();
+        }
+      }
 
-  function remove(id) {
-    tasks = tasks.filter(t => t.id !== id);
-    save(); render();
-  }
+      function remove(id) {
+        tasks = tasks.filter((t) => t.id !== id);
+        save();
+        render();
+      }
 
-  function startEdit(id) {
-    const t = tasks.find(t => t.id === id);
-    if (!t) return;
-    const span = document.getElementById('text-' + id);
-    span.contentEditable = 'true';
-    span.focus();
-    const range = document.createRange();
-    range.selectNodeContents(span);
-    range.collapse(false);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
+      function startEdit(id) {
+        const t = tasks.find((t) => t.id === id);
+        if (!t) return;
+        const span = document.getElementById("text-" + id);
+        span.contentEditable = "true";
+        span.focus();
+        const range = document.createRange();
+        range.selectNodeContents(span);
+        range.collapse(false);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
 
-    function finish() {
-      span.contentEditable = 'false';
-      const newText = span.textContent.trim();
-      if (newText) { t.text = newText; save(); }
+        function finish() {
+          span.contentEditable = "false";
+          const newText = span.textContent.trim();
+          if (newText) {
+            t.text = newText;
+            save();
+          }
+          render();
+        }
+        span.onblur = finish;
+        span.onkeydown = (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            span.blur();
+          }
+        };
+      }
+
+      function clearDone() {
+        tasks = tasks.filter((t) => !t.done);
+        save();
+        render();
+      }
+
+      function setFilter(f) {
+        filter = f;
+        render();
+      }
+
+      document.getElementById("newTask").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") addTask();
+      });
+
       render();
-    }
-    span.onblur = finish;
-    span.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); span.blur(); } };
-  }
-
-  function clearDone() {
-    tasks = tasks.filter(t => !t.done);
-    save(); render();
-  }
-
-  function setFilter(f) {
-    filter = f;
-    render();
-  }
-
-  document.getElementById('newTask').addEventListener('keydown', e => {
-    if (e.key === 'Enter') addTask();
-  });
-
-  render();
-</script>
-</body>
+    </script>
+  </body>
 </html>
